@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.web.client.RestClient;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -20,6 +21,9 @@ class SpringbootApplicationTests {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RestClient restClient;
 
     @Test
     void testGen() {
@@ -47,8 +51,13 @@ class SpringbootApplicationTests {
     }
 
     @Test
-    public void testSet(){
+    public void testSet() {
         ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-        operations.set("name","zhangsan");
+        operations.set("name", "zhangsan");
+    }
+
+    @Test
+    public void testRestClient() {
+        System.out.println(restClient.get().uri("/health").retrieve().body(String.class));
     }
 }

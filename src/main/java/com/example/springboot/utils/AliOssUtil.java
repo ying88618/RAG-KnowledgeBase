@@ -10,13 +10,11 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 
 @Component
 public class AliOssUtil {
 
-    // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
     private String endpoint;
     private String accessKeyId;
     private String accessKeySecret;
@@ -41,9 +39,7 @@ public class AliOssUtil {
     private void init() {
 
         // 填写Object完整路径，完整路径中不能包含Bucket名称，例如exampledir/exampleobject.txt。
-
         // 填写Bucket所在地域。以华东1（杭州）为例，Region填写为cn-hangzhou。
-
         // 创建OSSClient实例。
         // 当OSSClient实例不再使用时，调用shutdown方法以释放资源。
         ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
@@ -60,17 +56,7 @@ public class AliOssUtil {
     public String uploadFile(String objectName, InputStream in) throws Exception {
         String url = "";
 
-        // 填写字符串。
-//            String content = "Hello OSS，你好世界";
-
-        // 创建PutObjectRequest对象。
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, in);
-
-        // 如果需要上传时设置存储类型和访问权限，请参考以下示例代码。
-        // ObjectMetadata metadata = new ObjectMetadata();
-        // metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());
-        // metadata.setObjectAcl(CannedAccessControlList.Private);
-        // putObjectRequest.setMetadata(metadata);
 
         // 上传字符串。
         PutObjectResult result = ossClient.putObject(putObjectRequest);

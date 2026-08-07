@@ -35,3 +35,4 @@ build/
 application.yml
 *.log
 springboot-01-start/
+.env

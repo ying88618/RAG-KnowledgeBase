@@ -3,10 +3,8 @@ package com.example.springboot.anno;
 import com.example.springboot.validation.StateValidation;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import jakarta.validation.constraints.NotEmpty;
 
 import java.lang.annotation.*;
-import java.lang.reflect.Field;
 
 @Documented
 @Target({ElementType.FIELD})
