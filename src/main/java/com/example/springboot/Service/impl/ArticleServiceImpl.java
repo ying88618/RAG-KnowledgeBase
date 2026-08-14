@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class ArticleServiceimpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;

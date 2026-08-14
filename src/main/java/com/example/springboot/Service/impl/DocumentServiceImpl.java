@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class DocumentServiceimpl extends ServiceImpl<DocumentMapper, Document> implements DocumentService {
+public class DocumentServiceImpl extends ServiceImpl<DocumentMapper, Document> implements DocumentService {
 
     @Autowired
     private AliOssUtil aliOssUtil;

@@ -31,8 +31,20 @@ build/
 
 ### VS Code ###
 .vscode/
-###配置文件
-application.yml
+
+### 配置文件 / 敏感信息 ###
+application.properties
 *.log
-springboot-01-start/
-.env
+**/.env
+
+### Python ###
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+### OS / Editor ###
+.DS_Store
+Thumbs.db

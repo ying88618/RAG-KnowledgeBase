@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.UUID;
 
 @Service
-public class FileUploadServiceimpl implements FileUploadService {
+public class FileUploadServiceImpl implements FileUploadService {
 
     @Autowired
     private AliOssUtil aliOssUtil;

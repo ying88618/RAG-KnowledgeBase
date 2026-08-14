@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from .schemas import IngestRequest, IngestResponse
 from .pipeline import run_ingest
 
+
 app = FastAPI(title="Knowledge Ingest")
 
 

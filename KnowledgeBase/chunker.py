@@ -8,4 +8,3 @@ _splitter = RecursiveCharacterTextSplitter(
 
 def split(text: str) -> list[str]:
     return _splitter.split_text(text)
-

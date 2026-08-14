@@ -20,6 +20,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private JwtUtil jwtUtil; 
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");
@@ -29,7 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             if (redisToken == null) {
                 throw new RuntimeException();
             }
-            Map<String, Object> claims = JwtUtil.parseToken(token);
+            Map<String, Object> claims = jwtUtil.parseToken(token);
             ThreadLocalUtil.setThreadLocal(claims);
             return true;
         } catch (Exception e) {

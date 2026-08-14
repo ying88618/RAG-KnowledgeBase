@@ -38,10 +38,6 @@ public class AliOssUtil {
     @PostConstruct
     private void init() {
 
-        // 填写Object完整路径，完整路径中不能包含Bucket名称，例如exampledir/exampleobject.txt。
-        // 填写Bucket所在地域。以华东1（杭州）为例，Region填写为cn-hangzhou。
-        // 创建OSSClient实例。
-        // 当OSSClient实例不再使用时，调用shutdown方法以释放资源。
         ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
         clientBuilderConfiguration.setSignatureVersion(SignVersion.V4);
         this.ossClient = OSSClientBuilder.create()

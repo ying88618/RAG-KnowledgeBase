@@ -8,6 +8,7 @@ import com.example.springboot.Service.UserService;
 import com.example.springboot.mapper.UserMapper;
 import com.example.springboot.pojo.Result;
 import com.example.springboot.pojo.User;
+
 import com.example.springboot.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
-public class UserServiceimpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
     private UserMapper userMapper;
@@ -32,6 +33,9 @@ public class UserServiceimpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public void register(String username, String password) {
@@ -64,7 +68,7 @@ public class UserServiceimpl extends ServiceImpl<UserMapper, User> implements Us
             Map<String, Object> claims = new HashMap<>();
             claims.put("id", u.getId());
             claims.put("username", u.getUsername());
-            String token = JwtUtil.genToken(claims);
+            String token = jwtUtil.genToken(claims);
             //保存token到redis
             ValueOperations<String, String> operation = stringRedisTemplate.opsForValue();
             operation.set(token, token, 14, TimeUnit.DAYS);

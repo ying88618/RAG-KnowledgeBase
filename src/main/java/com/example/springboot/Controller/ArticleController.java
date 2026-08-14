@@ -23,7 +23,6 @@ public class ArticleController {
     private ArticleService articleService;
 
     @GetMapping("/list")
-    //验证token
     public Result<String> list() {
 //        try {
 //            Map<String,Object> claims = JwtUtil.parseToken(token);

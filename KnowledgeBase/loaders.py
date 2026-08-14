@@ -31,4 +31,3 @@ def parse_bytes(raw: bytes, file_type: str) -> str:
         return raw.decode("utf-8", errors="ignore")
 
     raise HTTPException(status_code=400, detail=f"不支持此文件类型:{file_type}")
-

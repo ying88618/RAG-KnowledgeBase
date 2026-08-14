@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class CategoryServiceimpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
+public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
