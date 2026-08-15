@@ -4,7 +4,6 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from .llm import SYSTEM_PROMPT
-from .retriever import retrieve
 from .graph import make_agent
 from .memory import load_history, append_turn
 
@@ -34,26 +33,17 @@ def format_sources(results: list[dict]) -> list[dict]:
 @app.post("/chat/stream")
 async def chat_stream(req: ChatRequest):
 
-    results = await retrieve(
-        req.question, req.collection_name, k=4, score_threshold=0.5
-    )
-    sources = format_sources(results)
-
-    context = format_context(results)
-    system_content = SYSTEM_PROMPT.format(context=context)
     history = load_history(req.user_id, req.session_id, n=10)
     append_turn(req.user_id, req.session_id, "user", req.question)
 
     agent = make_agent(req.collection_name)
     config = {"configurable": {"thread_id": req.session_id}}
 
-    messages = [{"role": "system", "content": system_content}]
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     messages += history
     messages.append({"role": "user", "content": req.question})
 
     async def event_generator():
-
-        yield f"data: {json.dumps({'type': 'retrieval', 'sources': sources}, ensure_ascii=False)}\n\n"
 
         full = []
         async for msg_chunk, _meta in agent.astream(

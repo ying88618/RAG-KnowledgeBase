@@ -12,3 +12,5 @@ httpx
 pdfplumber
 python-docx
 langgraph-checkpoint
+redis
+tavily-python

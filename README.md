@@ -3,7 +3,8 @@
 一个前后端分离的全栈项目，由 **Java 后端（Spring Boot）** 与 **Python 知识库 / 智能体服务** 两部分组成：
 
 - **Java 端**：提供用户、文章、分类、文件上传、OSS、JWT 鉴权等 REST 接口，并通过 HTTP 调用 Python 端的智能体（Agent）能力。
-- **Python 端**：基于 FastAPI + LangGraph + pgvector 的知识库检索与对话 Agent，负责文档向量化入库与智能问答。
+- **Python 端**：基于 FastAPI + LangGraph + pgvector 的知识库检索与对话 Agent,并集成 Tavily 联网搜索工具,负责文档向量化入库、智能问答与实时信息检索。
+
 
 ---
 
