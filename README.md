@@ -3,7 +3,7 @@
 一个前后端分离的全栈项目，由 **Java 后端（Spring Boot）** 与 **Python 知识库 / 智能体服务** 两部分组成：
 
 - **Java 端**：提供用户、文章、分类、文件上传、OSS、JWT 鉴权等 REST 接口，并通过 HTTP 调用 Python 端的智能体（Agent）能力。
-- **Python 端**：基于 FastAPI + LangGraph + pgvector 的知识库检索与对话 Agent,并集成 Tavily 联网搜索工具,负责文档向量化入库、智能问答与实时信息检索。
+- **Python 端**：基于 FastAPI + LangGraph + pgvector 的知识库检索与对话 Agent，并集成 Tavily 联网搜索工具，负责文档向量化入库、智能问答与实时信息检索。Agent 以**全局单例**形式构建（`create_agent` 仅执行一次），请求级别的「知识库集合名 / 相似度阈值」通过 `contextvars` 注入，由模型自主决定是否调用 `knowledge_base_search`（本地知识库）或 `web_search`（Tavily 联网）工具。
 
 
 ---
@@ -94,6 +94,7 @@ cp KnowledgeBase/.env.example KnowledgeBase/.env
 | `DATABASE_URL` | PostgreSQL 连接串（含 pgvector） | `postgresql+psycopg://user:pass@localhost:5432/KnowledgeBase` |
 | `REDIS_URL` | Redis 连接串 | `redis://localhost:6379/0` |
 | `CHAT_HISTORY_TTL` | 聊天历史过期时间（秒） | `1800` |
+| `TAVILY_API_KEY` | Tavily 联网搜索 Key（用于 `web_search` 工具） | `your_key_here` |
 
 > 注意：本项目 Redis 运行在本地（`localhost:6379`）且**未设置密码**。Java 端 `application.yml` 中的 Redis `password` 已注释，Python 端的 `REDIS_URL` 使用无密码格式 `redis://localhost:6379/0`，两端均按无密码连接。如需对外暴露 Redis 或启用密码，请同时：① Java 端取消注释 `password: ${REDIS_PASSWORD}` 并配置该环境变量；② Python 端将 `REDIS_URL` 改为 `redis://:password@localhost:6379/0`，确保两端密码一致。
 
@@ -174,6 +175,21 @@ cd e:/IdeaProjects/springboot
 2. **数据库分离**：业务数据（用户/文章/分类等）在 MySQL，知识库向量与文档在 PostgreSQL + pgvector，两者互不干扰。
 3. **Redis 分离**：Java 端用 Redis 维护登录态 / JWT 校验；Python 端用 Redis 缓存聊天历史（TTL 1800s）。两端均连接本地 `localhost:6379`，且当前 Redis **未启用密码**，按无密码方式连接。
 4. **大模型代理**：Python 端通过硅基流动（`api.siliconflow.cn`）的 OpenAI 兼容接口访问 Qwen 系列模型，并非直连 OpenAI。
+
+---
+
+## 5.1 Agent 工具调用与请求上下文
+
+Python 端的对话 Agent 由 LangGraph `create_agent` 构建，注册了以下两个工具，由模型**自主决定**是否调用、调用哪个（不再做强制检索）：
+
+| 工具 | 作用 | 触发场景 |
+|------|------|----------|
+| `knowledge_base_search` | 调用 `retriever.retrieve` 在 pgvector 中做向量召回（Top-K=4，相似度阈值默认 0.5） | 用户问题涉及私人 / 本地知识库内容 |
+| `web_search` | 封装 Tavily 联网搜索（Top-5，`search_depth=basic`） | 需要实时 / 互联网信息，或知识库无相关内容 |
+
+**全局单例 + 请求上下文**：`graph.py` 在模块加载时即执行一次 `create_agent`，得到全局唯一的 `AGENT`；`chat.py` 通过 `get_agent()` 获取该实例，并调用 `set_request_context(collection_name, score_threshold=0.5)` 把「本次请求命中的知识库集合」与「相似度阈值」写入 `contextvars`。两个 `@tool` 函数在被模型调用时再读取 `contextvars` 中的集合名与阈值，从而避免在每次请求都重建 Agent 实例。
+
+请求体（`ChatRequest`）字段：`session_id`(str)、`user_id`(int)、`question`(str)、`collection_name`(str)。Java 端透传即可，无需解析工具返回的来源。
 
 ---
 
