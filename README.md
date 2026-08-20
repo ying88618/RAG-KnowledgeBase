@@ -1,6 +1,6 @@
 # 智能知识库问答系统（Spring Boot + Python 知识库服务）
 
-一个前后端分离的全栈项目，由 **Java 后端（Spring Boot）** 与 **Python 知识库 / 智能体服务** 两部分组成：
+这个项目由 **Java 后端（Spring Boot）** 与 **Python 知识库 / 智能体服务** 两部分组成：
 
 - **Java 端**：提供用户、文章、分类、文件上传、OSS、JWT 鉴权等 REST 接口，并通过 HTTP 调用 Python 端的智能体（Agent）能力。
 - **Python 端**：基于 FastAPI + LangGraph + pgvector 的知识库检索与对话 Agent，并集成 Tavily 联网搜索工具，负责文档向量化入库、智能问答与实时信息检索。Agent 以**全局单例**形式构建（`create_agent` 仅执行一次），请求级别的「知识库集合名 / 相似度阈值」通过 `contextvars` 注入，由模型自主决定是否调用 `knowledge_base_search`（本地知识库）或 `web_search`（Tavily 联网）工具。

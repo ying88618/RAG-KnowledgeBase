@@ -20,7 +20,7 @@ class ChatRequest(BaseModel):
 @app.post("/chat/stream")
 async def chat_stream(req: ChatRequest):
 
-    history = load_history(req.user_id, req.session_id, n=10)
+    history = load_history(req.user_id, req.session_id, n=6)
     append_turn(req.user_id, req.session_id, "user", req.question)
 
     agent = get_agent()
