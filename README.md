@@ -1,4 +1,4 @@
-# 智能知识库问答系统（RAG + 多工具 Agent）
+# 私域文档知识库（RAG + 多工具 Agent）
 
 > Java + Python 双服务架构的私域知识库问答系统：LangGraph 多工具 Agent 自主决策「本地知识库检索 / 联网搜索」，Milvus 向量召回 + bge-reranker 精排的两阶段检索，SSE 流式输出，并配套一套完整的 RAG 评测体系。
 
