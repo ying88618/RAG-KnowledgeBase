@@ -16,8 +16,8 @@ public class DocumentController {
     private DocumentService documentService;
 
     @PostMapping("/upload")
-    public Result<Document> upload(@RequestParam("file") MultipartFile file) {
-        return Result.success(documentService.create(file));
+    public Result<Document> upload(@RequestParam("file") MultipartFile file,String collectionName) {
+        return Result.success(documentService.create(file,collectionName));
     }
 
     @GetMapping("/list")

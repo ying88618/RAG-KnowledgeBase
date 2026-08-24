@@ -1,21 +1,21 @@
 import os
-from langchain_postgres import PGVector
+from langchain_milvus import Milvus
 from langchain_core.documents import Document
 from .embeddings import embeddings
 
-CONNECTION = os.getenv("DATABASE_URL")
+MILVUS_URI = os.getenv("MILVUS_URI", "localhost:19530")
 
 
-def build_vs(collection_name: str) -> PGVector:
-    return PGVector(
-        embeddings=embeddings,
+def build_vs(collection_name: str) -> Milvus:
+    return Milvus(
+        embedding_function=embeddings,
         collection_name=collection_name,
-        connection=CONNECTION,
-        async_mode=True,
-        create_extension=False,
-        pre_delete_collection=False,
+        connection_args={"uri": MILVUS_URI},
+        auto_id=True,                 
+        index_params={"index_type": "AUTOINDEX", "metric_type": "COSINE"},
+        search_params={"metric_type": "COSINE"},
+        drop_old=False,               
     )
-
 
 
 

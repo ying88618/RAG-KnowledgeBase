@@ -1,6 +1,7 @@
 import json
+import asyncio
 from fastapi import FastAPI
-from fastapi.responses import StreamingResponse
+from sse_starlette.sse import EventSourceResponse, ServerSentEvent
 from pydantic import BaseModel
 
 from .llm import SYSTEM_PROMPT
@@ -24,33 +25,42 @@ async def chat_stream(req: ChatRequest):
     append_turn(req.user_id, req.session_id, "user", req.question)
 
     agent = get_agent()
-    set_request_context(req.collection_name, score_threshold=0.5)
-    config = {
-        "configurable": {
-            "score_threshold": 0.5
-        }
-    }
+    config = {"configurable": {"score_threshold": 0.25}}
 
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     messages += history
     messages.append({"role": "user", "content": req.question})
 
     async def event_generator():
+        set_request_context(req.collection_name, score_threshold=0.25)
 
         full = []
-        async for msg_chunk, _meta in agent.astream(
-            {"messages": messages},
-            config=config,
-            stream_mode="messages",
-        ):
-            text = getattr(msg_chunk, "content", "")
-            if text and isinstance(text, str):
-                full.append(text)
-                yield f"data: {json.dumps({'type': 'token', 'content': text}, ensure_ascii=False)}\n\n"
+        try:
+            async for msg_chunk, _meta in agent.astream(
+                {"messages": messages},
+                config=config,
+                stream_mode="messages",
+            ):
+                text = getattr(msg_chunk, "content", "")
+                if text and isinstance(text, str):
+                    full.append(text)
+                    yield ServerSentEvent(
+                        data={"type": "token", "content": text}
+                    )
 
-        answer = "".join(full)
-        append_turn(req.user_id, req.session_id, "assistant", answer)
-        yield f"data: {json.dumps({'type': 'done', 'content': ''.join(full)}, ensure_ascii=False)}\n\n"
+            append_turn(req.user_id, req.session_id, "assistant", "".join(full))
+            yield ServerSentEvent(
+                data={"type": "done", "content": "".join(full)}
+            )
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+        except asyncio.CancelledError:
+            logger = __import__("logging").getLogger("knowledge_agent")
+            logger.info("SSE client disconnected, abort streaming.")
+            raise
+
+    return EventSourceResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        ping=15,          
+    )
 

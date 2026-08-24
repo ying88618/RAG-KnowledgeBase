@@ -11,7 +11,7 @@ _current_collection: contextvars.ContextVar[str] = contextvars.ContextVar(
     "current_collection"
 )
 _current_threshold: contextvars.ContextVar[float] = contextvars.ContextVar(
-    "current_threshold", default=0.5
+    "current_threshold", default=0.25
 )
 
 logging.basicConfig(
@@ -45,7 +45,7 @@ async def web_search(query: str):
     return await tavily_web_search(query)
 
 
-def set_request_context(collection_name: str, score_threshold: float = 0.5):
+def set_request_context(collection_name: str, score_threshold: float = 0.25):
     _current_collection.set(collection_name)
     _current_threshold.set(score_threshold)
 

@@ -5,12 +5,13 @@ langchain-openai
 python-dotenv
 langgraph
 langchain-community
-langchain-postgres
-psycopg[binary]
-pgvector
 httpx
 pdfplumber
 python-docx
 langgraph-checkpoint
 redis
 tavily-python
+sse-starlette
+pymilvus
+langchain-milvus
+mammoth

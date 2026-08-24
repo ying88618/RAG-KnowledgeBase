@@ -25,8 +25,11 @@ public class DocumentServiceImpl extends ServiceImpl<DocumentMapper, Document> i
     private AgentService agentService;
 
     @Override
-    public Document create(MultipartFile file) {
+    public Document create(MultipartFile file,String collectionName) {
         try {
+            if (collectionName == null || collectionName.isBlank()) {
+                collectionName = "kb_default";
+            }
             String originalFilename = file.getOriginalFilename();
             String extension = "";
             if (originalFilename != null && originalFilename.contains(".")) {
@@ -41,7 +44,7 @@ public class DocumentServiceImpl extends ServiceImpl<DocumentMapper, Document> i
             document.setFileType(extension.replace(".", ""));
             document.setFileSize((long) file.getSize());
             document.setStatus(0);
-            document.setCollectionName("kb_default");
+            document.setCollectionName(collectionName);
             document.setCreateTime(LocalDateTime.now());
             document.setUpdateTime(LocalDateTime.now());
             baseMapper.insert(document);

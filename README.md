@@ -1,138 +1,142 @@
-# 智能知识库问答系统（Spring Boot + Python 知识库服务）
+# 智能知识库问答系统（RAG + 多工具 Agent）
 
-这个项目由 **Java 后端（Spring Boot）** 与 **Python 知识库 / 智能体服务** 两部分组成：
+> Java + Python 双服务架构的私域知识库问答系统：LangGraph 多工具 Agent 自主决策「本地知识库检索 / 联网搜索」，Milvus 向量召回 + bge-reranker 精排的两阶段检索，SSE 流式输出，并配套一套完整的 RAG 评测体系。
 
-- **Java 端**：提供用户、文章、分类、文件上传、OSS、JWT 鉴权等 REST 接口，并通过 HTTP 调用 Python 端的智能体（Agent）能力。
-- **Python 端**：基于 FastAPI + LangGraph + pgvector 的知识库检索与对话 Agent，并集成 Tavily 联网搜索工具，负责文档向量化入库、智能问答与实时信息检索。Agent 以**全局单例**形式构建（`create_agent` 仅执行一次），请求级别的「知识库集合名 / 相似度阈值」通过 `contextvars` 注入，由模型自主决定是否调用 `knowledge_base_search`（本地知识库）或 `web_search`（Tavily 联网）工具。
+## 项目亮点
 
+- **两阶段检索**：Milvus（bge-m3）召回 Top-20 → bge-reranker-v2-m3 交叉编码器精排 Top-4，rerank 服务异常时自动降级双塔排序
+- **数据驱动优化**：自建 120 条 QA 评测集（LLM 生成 + 人工筛选 + LLM-as-a-Judge），三指标量化优化收益：**Hit Rate@4 45.8% → 68.3%，MRR 0.304 → 0.584，内容可回答率 27.5% → 40.0%**
+- **多工具 Agent**：LangGraph `create_agent` 全局单例 + `contextvars` 请求级上下文隔离，并发请求零串库
+- **全链路流式**：sse-starlette 实现 token 级 SSE 输出、心跳保活、断连处理，Java 端透传转发
+- **独立完成双端开发**：Java 侧用户/权限/文件上传/OSS 全套业务 + Python 侧 AI 服务，独立联调
 
----
-
-## 1. 整体架构
+## 架构
 
 ```
-┌──────────────┐      HTTP (8071 → 8000)      ┌──────────────────┐
-│  Spring Boot │ ───────────────────────────► │  Python FastAPI  │
-│  (Java 21)   │   agent.base-url            │  (uvicorn :8000) │
-│  :8071       │                              │  LangGraph Agent │
-└──────┬───────┘                              └────────┬─────────┘
+┌──────────────┐  HTTP + SSE (8071 → 8000)  ┌────────────────────┐
+│  Spring Boot │ ──────────────────────────► │  FastAPI Agent 服务 │
+│  (Java 21)   │                             │  (uvicorn :8000)   │
+│  :8071       │                             │  LangGraph Agent   │
+└──────┬───────┘                             └─────────┬──────────┘
        │                                               │
-       │                          ┌────────────────────┼───────────────────┐
-       ▼                          ▼                    ▼                   ▼
-┌────────────┐            ┌──────────────┐     ┌──────────────┐    ┌──────────────┐
-│ MySQL      │            │ PostgreSQL   │     │ Redis (Java) │    │ Redis (Py)   │
-│ big_event  │            │ + pgvector   │     │ 登录态/JWT   │    │ 聊天历史 TTL │
-│ 用户/业务  │            │ 向量库       │     │              │    │ 1800s        │
-└────────────┘            └──────────────┘     └──────────────┘    └──────────────┘
+       │        ┌──────────────┬───────────┐          │ 工具调用
+       ▼        ▼              ▼           ▼          ▼
+┌────────────┐ ┌──────────┐ ┌─────────┐ ┌──────────────┐ ┌──────────────┐
+│ MySQL      │ │ Redis    │ │ 阿里 OSS │ │ Milvus       │ │ 硅基流动 API  │
+│ 业务数据    │ │ 登录态/  │ │ 文件存储 │ │ 向量库        │ │ Qwen / bge-m3│
+│            │ │ 聊天历史 │ │          │ │ (两阶段检索)  │ │ / reranker   │
+└────────────┘ └──────────┘ └─────────┘ └──────────────┘ │ / Tavily     │
+                                                        └──────────────┘
 ```
 
-### 关键技术栈
-| 模块 | 技术 |
-|------|------|
-| Java | Spring Boot 3.x、Java 21、Maven、MyBatis-Plus 3.5.9 |
-| Python | FastAPI、uvicorn、LangGraph、LangChain、pgvector |
-| 数据库 | MySQL（`big_event`）、PostgreSQL + pgvector（`KnowledgeBase`） |
-| 缓存 | Redis（Java 端登录态/JWT；Python 端聊天历史） |
-| 对象存储 | 阿里云 OSS（oss-cn-shenzhen） |
-| 大模型 | 硅基流动 API 代理（OpenAI 兼容）：Qwen/Qwen3.5-27B，嵌入 BAAI/bge-large-zh-v1.5 |
+**检索链路**：
 
-### 端口约定
-- Java 后端：`8071`
-- Python 知识库服务：`8000`
-- MySQL：`3306`
-- PostgreSQL：`5432`
-- Redis：`6379`
+```
+用户问题 → Agent 自主选择工具
+  ├─ knowledge_base_search（私域问题）
+  │    → Milvus 向量召回 Top-20（bge-m3）
+  │    → bge-reranker-v2-m3 精排 → Top-4（失败自动降级双塔排序）
+  └─ web_search（实时/联网问题）→ Tavily
+```
 
----
+## 核心设计
 
-## 2. 环境依赖
+### 1. 两阶段检索（`KnowledgeBase/retriever.py`）
 
-- **JDK 21**
-- **Maven 3.8+**
-- **Python 3.10+**
-- **MySQL 8.x**（库名 `big_event`）
-- **PostgreSQL 15+**，并安装 **pgvector** 扩展（库名 `KnowledgeBase`）
-- **Redis 6+**
+bi-encoder（双塔）向量检索速度快但区分度有限——本项目实测相似度分数挤压在 0.55~0.80 区间，排序质量差（MRR 仅 0.304）。引入 cross-encoder 精排后：
 
----
+- 召回阶段：Milvus + bge-m3，COSINE 度量，取 Top-20 候选
+- 精排阶段：bge-reranker-v2-m3 对 (query, chunk) 逐对打分，取 Top-4
+- 容错：rerank API 异常时自动降级为双塔排序，检索服务不中断
 
-## 3. 配置与环境变量
+### 2. Agent 并发隔离（`KnowledgeBase/graph.py`）
 
-> ⚠️ 本项目所有敏感配置均通过**环境变量注入**，仓库内不含任何明文密码。
-> 启动前请务必设置以下**必填**环境变量（MySQL 密码、JWT 密钥、OSS 凭据），否则 Java 端会因无法解析占位符而启动失败。Redis 运行在本地且未设密码，无需配置密码变量。
+Agent 以模块级全局单例构建（`create_agent` 仅执行一次）；请求级的「知识库集合名 / 阈值」通过 `contextvars` 注入，在 SSE 生成器内部 set（保证与生成器同 task），工具函数执行时再读取——多个并发请求各自隔离、互不串库，且无需每次请求重建 Agent。
 
-### 3.1 Java 端（`src/main/resources/application.yml` + `application.properties`）
+### 3. 流式输出（`KnowledgeBase/chat.py`）
 
-| 环境变量 | 用途 | 是否必填 |
-|----------|------|----------|
-| `DB_USERNAME` | MySQL 用户名（默认 `root`） | 否（有默认值） |
-| `DB_URL` | MySQL JDBC 连接串（默认本地 `big_event`） | 否（有默认值） |
-| `DB_PASSWORD` | MySQL 密码 | **必填** |
-| `REDIS_HOST` | Redis 主机（默认 `localhost`） | 否 |
-| `REDIS_PORT` | Redis 端口（默认 `6379`） | 否 |
-| `LOG_PATH` | 日志文件输出路径 | 否（默认 `springboot-01-start/logs/springboot.log`） |
-| `JWT_KEY` | JWT 签名密钥 | **必填** |
-| `OSS_ACCESS_KEY_ID` | 阿里云 OSS AccessKeyId | **必填** |
-| `OSS_ACCESS_KEY_SECRET` | 阿里云 OSS AccessKeySecret | **必填** |
+基于 sse-starlette 的 `EventSourceResponse`：token 级推送、15s 心跳保活、`CancelledError` 捕获处理客户端断连；聊天历史存 Redis（TTL 1800s），多轮对话携带最近 6 轮上下文。
 
-> 说明：Java 端 `application.properties` 中的 OSS endpoint、bucket、region 及 Agent 地址（`http://127.0.0.1:8000/`）已写死在文件中，如需变更可直接改文件或补充对应占位符。
+## 评测体系
 
-### 3.2 Python 端（`KnowledgeBase/.env`）
+> 评测脚本见 `KnowledgeBase/evaluation/`（在项目根目录运行；`COLLECTION` / `.env` 路径请按实际环境调整）。
 
-复制模板后填写（`.env` 已被 `.gitignore` 忽略，不会入库）：
+**方法论**：
+
+- **测试集**：120 条 QA，LLM 从入库文档自动生成（要求问题不复述原文措辞，避免词汇重叠导致指标虚高）+ 人工筛选
+- **文件级指标**：Hit Rate@K（Top-K 是否命中来源文档）、MRR
+- **内容级指标**：LLM-as-a-Judge 可回答率（裁判判断 Top-4 内容能否回答问题；裁判仅可依据片段判断、禁止使用自身知识，结果经人工抽检校准）
+- **对照实验**：分块参数、检索策略均为单变量对照
+
+**结果**：
+
+| 配置 | Hit Rate@4 | MRR | 内容可回答率* |
+|---|---|---|---|
+| 基线：向量检索 Top-4（分块 400/120） | 45.8% | 0.304 | 27.5% |
+| 对照：分块 300/80 | 40.8% | 0.250 | 20.0% |
+| **两阶段：召回 Top-20 + 精排 Top-4** | **68.3%** | **0.584** | **40.0%** |
+
+\* 可回答率为宽松口径（yes + partial）；语料为 13 份高相似度中文文档，裁判口径偏严格。
+
+**结论**：
+
+1. 分块 300/80 为负优化（双指标一致下降），确认 400/120 处于最优区间——小 chunk 语义密度不足，改写后的问题与碎片化片段相似度下降；
+2. 检索瓶颈在双塔排序而非召回（MRR 低 + 分数挤压），两阶段检索三指标全面提升；
+3. 剩余未命中样本中过半为多文档知识重叠导致的判据假阴性（内容可答但文件不同），内容级指标更贴近真实体验。
+
+## 快速开始
+
+### 1. 基础设施
+
+**Milvus**（docker-compose 含 etcd + MinIO，见 `docker/milvus-compose.yml`）：
 
 ```bash
-cp KnowledgeBase/.env.example KnowledgeBase/.env
+docker compose -f docker/milvus-compose.yml up -d
 ```
 
-| 变量 | 说明 | 示例 |
-|------|------|------|
-| `OPENAI_API_KEY` | 硅基流动 API Key | `your_key_here` |
-| `OPENAI_BASE_URL` | 模型代理地址 | `https://api.siliconflow.cn/v1` |
-| `MODEL_NAME` | 对话模型 | `Qwen/Qwen3.5-27B` |
-| `EMBEDDING_MODEL` | 嵌入模型 | `BAAI/bge-large-zh-v1.5` |
-| `DATABASE_URL` | PostgreSQL 连接串（含 pgvector） | `postgresql+psycopg://user:pass@localhost:5432/KnowledgeBase` |
-| `REDIS_URL` | Redis 连接串 | `redis://localhost:6379/0` |
-| `CHAT_HISTORY_TTL` | 聊天历史过期时间（秒） | `1800` |
-| `TAVILY_API_KEY` | Tavily 联网搜索 Key（用于 `web_search` 工具） | `your_key_here` |
+另需：**MySQL 8**（建库 `big_event`）、**Redis 6+**。
 
-> 注意：本项目 Redis 运行在本地（`localhost:6379`）且**未设置密码**。Java 端 `application.yml` 中的 Redis `password` 已注释，Python 端的 `REDIS_URL` 使用无密码格式 `redis://localhost:6379/0`，两端均按无密码连接。如需对外暴露 Redis 或启用密码，请同时：① Java 端取消注释 `password: ${REDIS_PASSWORD}` 并配置该环境变量；② Python 端将 `REDIS_URL` 改为 `redis://:password@localhost:6379/0`，确保两端密码一致。
-
----
-
-## 4. 启动步骤
-
-> 推荐启动顺序：**基础设施 → Python 入库 → Python 服务 → Java 服务**。
-
-### 4.1 启动基础设施
-确保 MySQL、PostgreSQL（已装 pgvector）、Redis 均已启动，并创建好对应数据库：
-- MySQL 建库 `big_event`
-- PostgreSQL 建库 `KnowledgeBase`，并执行 `CREATE EXTENSION IF NOT EXISTS vector;`
-
-### 4.2 启动 Python 知识库服务（含入库接口）
+### 2. Python 端（Agent 服务）
 
 ```bash
 cd KnowledgeBase
-
-# 安装依赖（建议使用虚拟环境）
 python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+.venv\Scripts\activate        # Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt
 
-# 配置环境变量
-cp .env.example .env             # 然后编辑 .env 填入真实值
+cp .env.example .env          # 填入真实 API Key
 
-# 启动服务（main.py 已聚合 ingest 与 chat 两个子应用，统一监听 8000）
-# main.py 内部 include_router 挂载了：
-#   - POST /documents/ingest   （文档向量化入库，对应 ingest.py）
-#   - chat 相关接口            （对应 chat.py）
 uvicorn KnowledgeBase.main:app --host 0.0.0.0 --port 8000
-# 或用包内 __main__ 入口：
-# python -m KnowledgeBase.main
 ```
 
-### 4.2.1 触发文档入库
-入库不是命令行脚本，而是调用已启动服务的 HTTP 接口。服务起来后，向 `POST http://127.0.0.1:8000/documents/ingest` 发送 `IngestRequest`（字段见 `KnowledgeBase/schemas.py`）即可触发向量化入库，例如：
+**环境变量**（`KnowledgeBase/.env`，`.env` 已被 gitignore）：
+
+| 变量 | 说明 |
+|---|---|
+| `OPENAI_API_KEY` | 硅基流动 API Key |
+| `OPENAI_BASE_URL` | 模型代理地址（默认 `https://api.siliconflow.cn/v1`） |
+| `MODEL_NAME` | 对话模型 |
+| `EMBEDDING_MODEL` | 嵌入模型（默认 `BAAI/bge-m3`） |
+| `RERANK_MODEL` | 重排模型（默认 `BAAI/bge-reranker-v2-m3`） |
+| `MILVUS_URI` | Milvus 地址（默认 `http://localhost:19530`） |
+| `REDIS_URL` | Redis 连接串 |
+| `CHAT_HISTORY_TTL` | 聊天历史过期时间（秒） |
+| `TAVILY_API_KEY` | Tavily 联网搜索 Key |
+
+### 3. Java 端（业务后端）
+
+```powershell
+$env:DB_PASSWORD="你的MySQL密码"
+$env:JWT_KEY="一段足够长的随机字符串"
+$env:OSS_ACCESS_KEY_ID="你的OSS_ID"
+$env:OSS_ACCESS_KEY_SECRET="你的OSS_SECRET"
+
+mvnw.cmd spring-boot:run
+```
+
+启动后监听 `http://localhost:8071`，通过 `agent.base-url` 调用 Python 服务。
+
+### 4. 文档入库
 
 ```bash
 curl -X POST http://127.0.0.1:8000/documents/ingest \
@@ -142,81 +146,61 @@ curl -X POST http://127.0.0.1:8000/documents/ingest \
     "file_url": "https://your-oss-bucket/doc.pdf",
     "file_name": "doc.pdf",
     "file_type": "pdf",
-    "collection_name": "KnowledgeBase"
+    "collection_name": "kb_default"
   }'
 ```
-> `IngestRequest` 字段：`doc_id`(int)、`file_url`(str)、`file_name`(str)、`file_type`(str)、`collection_name`(str)，详见 `KnowledgeBase/schemas.py`。
 
-### 4.3 启动 Java 后端
+支持 `pdf` / `docx` / `md` / `txt`。文档经下载 → 解析 → 分块（400 字符 / 120 重叠）→ bge-m3 向量化 → 写入 Milvus。
 
-先设置环境变量（以 PowerShell 为例，Linux/macOS 用 `export`）：
-
-```powershell
-$env:DB_PASSWORD="你的MySQL密码"
-$env:JWT_KEY="一段足够长的随机字符串"
-$env:OSS_ACCESS_KEY_ID="你的OSS_ID"
-$env:OSS_ACCESS_KEY_SECRET="你的OSS_SECRET"
-```
-
-然后使用 Maven 启动：
+### 5. 流式对话
 
 ```bash
-cd e:/IdeaProjects/springboot
-./mvnw spring-boot:run          # 或 Windows: mvnw.cmd spring-boot:run
+curl -N -X POST http://127.0.0.1:8000/chat/stream \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "s1",
+    "user_id": 1,
+    "question": "这份文档里栈满的条件是什么？",
+    "collection_name": "kb_default"
+  }'
 ```
 
-启动成功后，Java 后端监听 `http://localhost:8071`，并通过 `agent.base-url` 调用 Python 端的 `http://127.0.0.1:8000/`。
-
----
-
-## 5. 关键对接点说明
-
-1. **跨端调用**：Java 端 `AgentController` / `AgentService` 通过 `application.properties` 中的 `agent.base-url=http://127.0.0.1:8000/` 调用 Python 端。Python 端未启动时，相关接口会超时（`agent.timeout=5000`，`agent.read-timeout=60000`）。
-2. **数据库分离**：业务数据（用户/文章/分类等）在 MySQL，知识库向量与文档在 PostgreSQL + pgvector，两者互不干扰。
-3. **Redis 分离**：Java 端用 Redis 维护登录态 / JWT 校验；Python 端用 Redis 缓存聊天历史（TTL 1800s）。两端均连接本地 `localhost:6379`，且当前 Redis **未启用密码**，按无密码方式连接。
-4. **大模型代理**：Python 端通过硅基流动（`api.siliconflow.cn`）的 OpenAI 兼容接口访问 Qwen 系列模型，并非直连 OpenAI。
-
----
-
-## 5.1 Agent 工具调用与请求上下文
-
-Python 端的对话 Agent 由 LangGraph `create_agent` 构建，注册了以下两个工具，由模型**自主决定**是否调用、调用哪个（不再做强制检索）：
-
-| 工具 | 作用 | 触发场景 |
-|------|------|----------|
-| `knowledge_base_search` | 调用 `retriever.retrieve` 在 pgvector 中做向量召回（Top-K=4，相似度阈值默认 0.5） | 用户问题涉及私人 / 本地知识库内容 |
-| `web_search` | 封装 Tavily 联网搜索（Top-5，`search_depth=basic`） | 需要实时 / 互联网信息，或知识库无相关内容 |
-
-**全局单例 + 请求上下文**：`graph.py` 在模块加载时即执行一次 `create_agent`，得到全局唯一的 `AGENT`；`chat.py` 通过 `get_agent()` 获取该实例，并调用 `set_request_context(collection_name, score_threshold=0.5)` 把「本次请求命中的知识库集合」与「相似度阈值」写入 `contextvars`。两个 `@tool` 函数在被模型调用时再读取 `contextvars` 中的集合名与阈值，从而避免在每次请求都重建 Agent 实例。
-
-请求体（`ChatRequest`）字段：`session_id`(str)、`user_id`(int)、`question`(str)、`collection_name`(str)。Java 端透传即可，无需解析工具返回的来源。
-
----
-
-## 6. 常见问题
-
-- **Java 启动报 `Could not resolve placeholder 'DB_PASSWORD'`**：未设置环境变量。请按 4.3 设置 `DB_PASSWORD` 等必填变量。
-- **Python 端调用模型报错 401**：检查 `.env` 中 `OPENAI_API_KEY` 是否为真实硅基流动 Key。
-- **pgvector 报错 `relation "..." does not exist` / 无 vector 扩展**：确认已在 `KnowledgeBase` 库执行 `CREATE EXTENSION vector;`。
-- **Agent 接口超时**：确认 Python 服务已在 8000 端口启动，且 `agent.base-url` 可达。
-
----
-
-## 7. 目录结构（简要）
+SSE 事件格式：
 
 ```
-springboot/
-├── src/main/java/com/example/springboot/   # Spring Boot 后端
-│   ├── Controller/                         # REST 控制器
-│   ├── Service/impl/                        # 业务实现
-│   ├── pojo/                               # 实体 / 请求对象（含 ChatRequest）
-│   └── resources/
-│       ├── application.yml                 # 主配置（已纳入版本管理，无明文密码）
-│       └── application.properties          # OSS / Agent / JWT 配置
-├── KnowledgeBase/                          # Python 知识库 / 智能体服务
-│   ├── .env.example                        # 环境变量模板（.env 被忽略）
-│   ├── requirements.txt
-│   └── *.py                                # 入库 / 服务 / Agent 逻辑
-├── springboot-01-start/                    # 日志输出目录
+data: {"type": "token", "content": "栈满的"}
+data: {"type": "token", "content": "条件是..."}
+data: {"type": "done", "content": "完整回答文本"}
+```
+
+## 目录结构
+
+```
+├── src/main/java/...              # Spring Boot 后端（用户/权限/文件上传/OSS）
+├── KnowledgeBase/                 # Python AI 服务
+│   ├── main.py                    # FastAPI 入口（ingest + chat）
+│   ├── chat.py                    # SSE 流式对话接口
+│   ├── graph.py                   # LangGraph Agent + 工具注册 + contextvars 隔离
+│   ├── retriever.py               # 两阶段检索（召回 + rerank 精排）
+│   ├── vectorstore.py             # Milvus 封装
+│   ├── embeddings.py / llm.py     # 模型接入（硅基流动 OpenAI 兼容）
+│   ├── chunker.py / loaders.py    # 分块与文档解析（pdf/docx/md/txt）
+│   ├── pipeline.py / ingest.py    # 入库流水线
+│   ├── memory.py                  # Redis 聊天历史
+│   ├── web_search.py              # Tavily 联网搜索
+│   └── evaluation/                # 评测脚本（测试集生成/检索评测/LLM裁判/rerank评测）
 └── pom.xml
 ```
+
+## 踩坑记录
+
+开发过程中实际踩过并解决的坑，供参考：
+
+1. **rerank 分数并非 0~1 归一化**：bge-reranker-v2-m3 返回的 relevance_score 呈双峰分布（相关对趋近 1、不相关对趋近 0，中位数仅 0.004）。曾用 0.25 阈值过滤导致检索结果被全量滤除（线上表现为「未检索到」）。通过绕过 Agent 直调检索 + 全量分数分布统计定位根因，最终改为 Top-K 截断策略。教训：**第三方 API 的分数语义要先实测分布再使用**。
+2. **Milvus `get_collection_stats` 的 row_count 异步滞后**：刚插入的数据统计显示为 0，验证入库应使用 `query` 实查计数。
+3. **langchain-milvus 对不存在的 collection 会静默创建空库**：查询返回空结果但不报错，易与「检索无结果」混淆，需显式校验。
+4. **SSE 生成器与 contextvars**：FastAPI 的 SSE 响应生成器运行在独立 task 中，`set_request_context` 必须在生成器内部调用，工具函数才能读到当前请求的参数。
+
+## 相关技术
+
+Java 21 / Spring Boot 3.x / MyBatis-Plus / MySQL / Redis / 阿里云 OSS · Python / FastAPI / LangGraph / Milvus / bge-m3 / bge-reranker-v2-m3 / Tavily / sse-starlette
