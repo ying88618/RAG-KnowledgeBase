@@ -15,3 +15,5 @@ sse-starlette
 pymilvus
 langchain-milvus
 mammoth
+mcp<2
+mcp[cli]
