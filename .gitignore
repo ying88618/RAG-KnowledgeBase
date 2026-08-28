@@ -18,7 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
-springboot-01-start/logs
+/springboot-01-start/logs
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
