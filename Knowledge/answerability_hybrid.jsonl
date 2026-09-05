@@ -1,0 +1,120 @@
+{"question": "在代码逻辑中，当扫描到左括号字符时，程序会执行什么操作？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "yes"}
+{"question": "根据代码注释，在处理数字或小数部分时，添加空格字符的目的是什么？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "yes"}
+{"question": "在 GetPri 函数中，加号和减号运算符被分配的优先级数值是多少？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "yes"}
+{"question": "依据代码实现，括号、加减运算符和乘除运算符的优先级数值大小关系是怎样的？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "yes"}
+{"question": "根据代码片段，乘号（*）和除号（/）运算符对应的优先级返回值是多少？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "yes"}
+{"question": "在 Infix2Postfix 函数的循环处理中，当检测到当前字符为空格时，程序会执行什么操作？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "yes"}
+{"question": "程序提示用户输入的表达式具体支持哪些运算符和小数类型？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "yes"}
+{"question": "根据代码注释，计算完成后的最终结果存储在何处，并通过什么方式返回？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "partial"}
+{"question": "在代码逻辑中，进行除法运算时若发现除数为 0，系统会如何处理？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "yes"}
+{"question": "程序执行完毕后，最终的计算结果是通过什么操作从栈中获取的？", "source_file": "表达式求值程序课程设计文档.docx", "verdict": "partial"}
+{"question": "代码中用于遍历菜品列表进行动态渲染的数据源变量名是什么？", "source_file": "项目原代码.docx", "verdict": "partial"}
+{"question": "删除菜品时，表单提交的 HTTP 方法被设置为什么？", "source_file": "项目原代码.docx", "verdict": "yes"}
+{"question": "在该表格行中，除了删除按钮外，还通过 th:text 展示了 dish 对象的哪些属性？", "source_file": "项目原代码.docx", "verdict": "yes"}
+{"question": "createOrder 方法定义时接收了哪两个参数？", "source_file": "项目原代码.docx", "verdict": "yes"}
+{"question": "在实例化 Order 对象之前，代码对从 dishService 获取的菜品对象进行了什么判断及处理？", "source_file": "项目原代码.docx", "verdict": "yes"}
+{"question": "表格的表头部分定义了哪几个信息列？", "source_file": "项目原代码.docx", "verdict": "yes"}
+{"question": "表格单元格中的具体文本内容是通过什么方式从循环变量中提取的？", "source_file": "项目原代码.docx", "verdict": "no"}
+{"question": "该代码片段中定义的接口对应的请求路径是什么？", "source_file": "项目原代码.docx", "verdict": "no"}
+{"question": "订单创建成功后，系统是如何通过 redirectAttributes 传递成功消息的？", "source_file": "项目原代码.docx", "verdict": "yes"}
+{"question": "该报告所属的学院及时间信息是什么？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "在第三章系统详细设计中，除了数据库设计外，还列出了哪些具体的设计子项？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "该系统基于哪种数据库管理系统，且数据库名称为何？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "数据库设计中，两张核心表之间的关联逻辑是怎样的？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "系统性能设计中，数据库连接池采用了哪种具体的组件？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "系统通过什么机制防止下单过程中产生不完整的数据？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "在线下单功能中，处理用户提交请求的控制器方法接收了哪两个参数？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "请简述 OrderService.createOrder() 方法在处理订单时的主要业务逻辑步骤。", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "用户端首页的表格中展示了哪些菜品信息字段？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "系统界面设计的技术选型依据是什么，同时该设计如何优化了用户的操作流程？", "source_file": "课程设计报告.docx", "verdict": "yes"}
+{"question": "在 REST 接口设计中，统一配置调用 Python Agent 服务旨在达成什么架构目标？", "source_file": "简历_实习版.docx", "verdict": "yes"}
+{"question": "项目是如何处理敏感配置信息以实现仓库零明文的，具体涉及哪些配置项？", "source_file": "简历_实习版.docx", "verdict": "yes"}
+{"question": "在智能知识库问答平台项目中，Java 后端与 Python 端各自承担了什么功能？", "source_file": "简历_实习版.docx", "verdict": "yes"}
+{"question": "为什么 Few-shot 方法被认为是有效的？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "根据文档中的面试建议，为了适应大模型的本质，Prompt 的三个关键部分应如何排序？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "在应用开发中，采用结构化 Prompt 而非大段文字的优势原理是什么？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "多头注意力机制通过什么具体方式来克服单个注意力头难以捕捉多种关系的缺陷？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "早期 Transformer 与当前主流模型在位置编码的实现方式上有什么不同？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "根据文档内容，为什么模型在处理长上下文时容易遗忘前面的信息？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "作者在实际开发中刻意采用结构化格式编写 Prompt 的目的是什么？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "根据文档，结构化 Prompt 效果更好的机制原理是什么？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "根据文档建议，在实际开发过程中，为了避免信息被忽略，关键内容应当放置在上下文的哪些区域？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "根据片段内容，导致超长上下文质量下降及中间信息被忽略的底层技术原因是什么？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "根据文档，Transformer 的第一个局限性在计算复杂度方面是如何描述的？", "source_file": "RAG_test.docx", "verdict": "yes"}
+{"question": "RAG 技术主要旨在解决大模型存在的哪些具体问题？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "在 RAG 的标准流程中，检索和重排序分别采用什么模型，且通常涉及的数据量是多少？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "该设计方案中，工程层和安全层各自包含了哪些关键实施内容？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "在 RAG 检索策略中，Top-K 参数一般设定在什么数值区间比较合适？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "为什么在生产环境中进行混合检索时，通常建议使用 RRF 而不是手动固定权重？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "当用户提问模糊导致检索效果不佳时，可以采取哪些措施来改善？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "如果业务场景要求文档实时更新，应该选择哪种向量索引更新策略？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "当知识库文档发生变动时，向量索引通常有哪三种同步更新策略？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "为了降低 RAG 系统的 Token 消耗，文中提到了哪些具体的优化手段及其做法？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "根据文档内容，RAG 和微调分别适用于什么样的应用场景？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "为了有效处理 RAG 的幻觉问题，文中提到了哪些具体的技术手段以及核心原则？", "source_file": "RAG_test1.docx", "verdict": "yes"}
+{"question": "文中提到 LightRAG 与 GraphRAG 在索引成本方面存在怎样的差异？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "在设计法律文档检索系统时，促使选择 GraphRAG 的关键因素有哪些？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "使用 GraphRAG 技术虽然能突破传统 RAG 的天花板，但会面临哪些明确的代价？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "根据文档，为什么在需要深度理解时建议选 GraphRAG，而在需要灵活性时建议选 LightRAG？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "根据文档描述，构成 GraphRAG 必不可少的四个要素是什么？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "当 GraphRAG 的实体提取准确率不理想时，可以通过哪几种途径进行优化？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "根据文档内容，LightRAG 适用于哪些具体的典型应用场景？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "在什么情况下，团队会因为成本和效率的考量而倾向于选择 LightRAG？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "知识图谱问答（KGQA）与 GraphRAG 在图谱构建方式上有何不同？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "在 GraphRAG 的社区发现算法选择上，Leiden 算法相比 Louvain 算法有什么关键优势？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "文档中列举了哪些属于 GraphRAG 的典型应用场景？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "当面临预算紧张且知识库需要频繁更新的情况时，应该选择 GraphRAG 还是 LightRAG？", "source_file": "RAG_test2.docx", "verdict": "yes"}
+{"question": "针对文档处理和分块（Chunk）阶段，具体需要检查哪些优化细节？", "source_file": "RAG_test3.docx", "verdict": "yes"}
+{"question": "文档中提到混合检索具体包含哪两部分？", "source_file": "RAG_test3.docx", "verdict": "yes"}
+{"question": "为什么在 RAG 项目中不能仅依赖纯向量检索？", "source_file": "RAG_test3.docx", "verdict": "yes"}
+{"question": "根据文档内容，大语言模型在知识方面主要存在哪三个不足？", "source_file": "RAG_test3.docx", "verdict": "yes"}
+{"question": "针对 LLM 存在的知识缺陷，RAG 在生成回答前需要完成哪些关键动作以确保基于事实？", "source_file": "RAG_test3.docx", "verdict": "partial"}
+{"question": "根据文档，Agentic RAG 主要适用于哪些领域的问答任务？", "source_file": "RAG_test3.docx", "verdict": "yes"}
+{"question": "当遇到实体复杂关联或多跳推理等问题时，普通 RAG 和 Agentic RAG 的表现如何，文档建议如何改进？", "source_file": "RAG_test3.docx", "verdict": "yes"}
+{"question": "在 HNSW 算法中，哪两个参数被提及为核心参数，它们的具体含义及调整影响是什么？", "source_file": "RAG_test3.docx", "verdict": "yes"}
+{"question": "针对生产环境的多副本部署和持久化需求，文档中的面试答法推荐选择哪个数据库，并如何对比其他方案？", "source_file": "RAG_test3.docx", "verdict": "yes"}
+{"question": "GraphRAG 与传统 RAG 在检索的具体对象上有什么区别？", "source_file": "RAG_test5.docx", "verdict": "yes"}
+{"question": "根据文档中的演进逻辑，GraphRAG 是为了解决什么局限性而出现的？", "source_file": "RAG_test5.docx", "verdict": "yes"}
+{"question": "索引阶段结束后，系统会生成哪四类数据产物？", "source_file": "RAG_test5.docx", "verdict": "no"}
+{"question": "在 GraphRAG 的本地查询模式下，系统处理用户问题并生成回答的具体流程是什么？", "source_file": "RAG_test5.docx", "verdict": "yes"}
+{"question": "Leiden 算法划分出的社区结构具有怎样的层级特征？", "source_file": "RAG_test5.docx", "verdict": "yes"}
+{"question": "当社区层级划分得过于细致时，会产生什么后果？", "source_file": "RAG_test5.docx", "verdict": "yes"}
+{"question": "根据文档内容，社区粒度难以确定的根本矛盾是什么？", "source_file": "RAG_test5.docx", "verdict": "yes"}
+{"question": "在 LightRAG 长期运行的过程中，为何需要定期维护图谱，具体的维护动作有哪些？", "source_file": "RAG_test5.docx", "verdict": "yes"}
+{"question": "在混合检索方案中，关键词检索和语义检索各自的优势分别是什么？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "针对文档分块大小难以平衡的问题，文中提出了哪两种具体的解决策略？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "为什么文档中强调上游的坑会级联放大？请简述其传导过程。", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "根据文档描述，\"Lost in the Middle\"现象具体指的是大模型对上下文哪个位置的信息关注度最低？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "为了减少模型硬编答案的情况，文档中提到的拒绝回答机制包含哪些具体操作建议和技术实现方式？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "在 RAG 落地项目中，作者提到数据清洗与模型检索阶段的工期分配比例是多少？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "针对 RAG 落地中召回质量难调的问题，文档中分析了哪些核心难点并给出了什么解决思路？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "在增量更新机制中，通常采用哪些手段来检测文档是否发生了变更？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "为什么文档召回被认为是 RAG 系统中最难调优的环节，其核心矛盾是什么？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "针对简单事实型问题和复杂分析型问题，文档中建议分别设置多大的 K 值？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "在什么情况下向量召回会达到效果上限，此时应该采用什么思路？", "source_file": "RAG_test4.docx", "verdict": "yes"}
+{"question": "MCP 在本地和远程通信时分别使用什么协议？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "根据文档，Skills 主要编码了哪些内容以补充 Agent 的工具能力？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "文档中明确指出了哪三种策略可以用来防止 ReAct 出现死循环？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "根据文档描述，ReAct 任务在哪些具体情形下会被强制终止或退出循环？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "根据文档内容，哪些具体领域因为对输出质量要求较高，被认为值得消耗更多 Token 进行反复打磨？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "文档中提到 Reflection 机制在应对幻觉问题时，Agent 应采取的具体行动流程是什么？", "source_file": "RAG_test6.docx", "verdict": "partial"}
+{"question": "在文档列举的工具中，CrewAI 具备哪些主要特性？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "根据 Anthropic 的提醒，为什么通常不建议过早采用多 Agent 架构？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "系统支持哪些关键词来启动代码检查任务？", "source_file": "RAG_test6.docx", "verdict": "no"}
+{"question": "根据文档要求，代码审查必须包含哪几个方面，且哪一方面被列为最高优先级？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "根据文档内容，ReAct 模式存在哪些主要缺点？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "文档指出为了应对生产环境中的问题，需要将“循环”单独工程化，具体涉及哪五类治理？", "source_file": "RAG_test6.docx", "verdict": "yes"}
+{"question": "生产系统至少需要区分哪五个要素来管理任务？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "为什么文档认为长任务不能仅依赖上下文窗口，且 Anthropic 的架构分离思路有何关键意义？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "文中指出“帮我把客服体验优化一下”为什么不是一个有效的任务？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "面对隐藏在员工头脑或群聊中的业务规则，生产团队应该如何处理才能让 Agent 获取到这些知识？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "在 MVP 阶段，系统建设的首要关注点应该放在哪里？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "阶段四在逐级提高自治时，每升一级需要满足什么硬性条件，且明确反对基于什么理由进行升级？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "在 Agent 时代，人类工程师的价值主要体现在哪四个方面？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "随着 Agent 技术的发展，工程师的工作重心发生了怎样的转变，这对 Agent 应用工程师提出了什么具体要求？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "在第三层架构中，上下文模块需要向模型提供哪些信息？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "根据文档，长任务如果仅依靠对话历史维持会面临什么风险？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "在系统级别提升时，除了管理层的意见外，必须依靠什么来证明系统能够承受？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "根据文档，企业应该在什么情况下开始抽象 Agent 平台，且平台层与场景层的职责划分原则是什么？", "source_file": "RAG_test7.docx", "verdict": "yes"}
+{"question": "为解决 Agent 初始化开销及并发请求上下文隔离问题，采取了哪些技术手段？", "source_file": "刘子沐-Agent应用开发.pdf", "verdict": "yes"}
+{"question": "该智能知识库问答系统中，Java 服务主要承担什么职责？", "source_file": "刘子沐-Agent应用开发.pdf", "verdict": "yes"}

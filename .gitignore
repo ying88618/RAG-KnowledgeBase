@@ -60,3 +60,6 @@ Knowledge/answerability.jsonl
 
 ### 私人文件 ###
 *.docx
+Knowledge/venv/
+Knowledge/__pycache__/
+Knowledge/**/*.pyc

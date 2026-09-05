@@ -1,0 +1,150 @@
+{"question": "在代码逻辑中，当扫描到左括号字符时，程序会执行什么操作？", "answer": "直接入栈", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "根据代码注释，在处理数字或小数部分时，添加空格字符的目的是什么？", "answer": "用空格分隔不同操作数", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "在 GetPri 函数中，加号和减号运算符被分配的优先级数值是多少？", "answer": "1", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "依据代码实现，括号、加减运算符和乘除运算符的优先级数值大小关系是怎样的？", "answer": "括号（0）< 加减运算符（1）< 乘除运算符（2）", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "根据代码片段，乘号（*）和除号（/）运算符对应的优先级返回值是多少？", "answer": "2", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "在 Infix2Postfix 函数的循环处理中，当检测到当前字符为空格时，程序会执行什么操作？", "answer": "忽略空格（执行 i++ 并 continue）", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "程序提示用户输入的表达式具体支持哪些运算符和小数类型？", "answer": "支持+、-、*、/、()、小数", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "根据代码注释，计算完成后的最终结果存储在何处，并通过什么方式返回？", "answer": "存储在栈内最后一个元素，通过调用 PopNum(&ns) 返回", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "在代码逻辑中，进行除法运算时若发现除数为 0，系统会如何处理？", "answer": "输出“除数为 0！\\n”并返回 0。", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "程序执行完毕后，最终的计算结果是通过什么操作从栈中获取的？", "answer": "通过调用 PopNum(&ns) 获取栈内最后一个元素。", "source_file": "表达式求值程序课程设计文档.docx", "source_doc_id": 4}
+{"question": "页面中表格的表头包含哪些字段信息？", "answer": "ID、名称、价格、描述", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "代码中用于遍历菜品列表进行动态渲染的数据源变量名是什么？", "answer": "dishes", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "删除菜品时，表单提交的 HTTP 方法被设置为什么？", "answer": "post", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "在该表格行中，除了删除按钮外，还通过 th:text 展示了 dish 对象的哪些属性？", "answer": "price 和 description", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "createOrder 方法定义时接收了哪两个参数？", "answer": "dishId 和 quantity", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "在实例化 Order 对象之前，代码对从 dishService 获取的菜品对象进行了什么判断及处理？", "answer": "判断 dish 是否为 null，如果为 null 则抛出内容为“菜品不存在”的 RuntimeException", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "表格的表头部分定义了哪几个信息列？", "answer": "ID、名称、价格、描述", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "表格单元格中的具体文本内容是通过什么方式从循环变量中提取的？", "answer": "通过 th:text 属性绑定 dish 对象的 id、name、price 和 description 属性", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "该代码片段中定义的接口对应的请求路径是什么？", "answer": "/order", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "订单创建成功后，系统是如何通过 redirectAttributes 传递成功消息的？", "answer": "添加了一个名为 message 的 flash 属性，其值为\"下单成功！订单ID：\"拼接 order.getId()", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "该页面展示的主标题文字是什么？", "answer": "订单管理", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "根据代码逻辑，页面内容显示需要满足什么会话条件？", "answer": "session 中的 admin 属性不为空", "source_file": "项目原代码.docx", "source_doc_id": 5}
+{"question": "该报告所属的学院及时间信息是什么？", "answer": "信息与智能科学技术学院，2026 年 6 月", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "在第三章系统详细设计中，除了数据库设计外，还列出了哪些具体的设计子项？", "answer": "详细设计说明、系统流程框图、性能设计、界面设计", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "该系统基于哪种数据库管理系统，且数据库名称为何？", "answer": "基于 MySQL 数据库，数据库名称为 restaurant_db", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "数据库设计中，两张核心表之间的关联逻辑是怎样的？", "answer": "通过 dish_id 外键建立关联关系，订单表中的 dish_id 引用菜品表的主键 id", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "系统性能设计中，数据库连接池采用了哪种具体的组件？", "answer": "Spring Boot 默认使用 HikariCP 连接池。", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "系统通过什么机制防止下单过程中产生不完整的数据？", "answer": "使用@Transactional 注解确保原子性，使菜品查询、价格计算和订单保存作为一个整体执行，要么全部成功，要么全部回滚。", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "在线下单功能中，处理用户提交请求的控制器方法接收了哪两个参数？", "answer": "dishId 和 quantity 参数", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "请简述 OrderService.createOrder() 方法在处理订单时的主要业务逻辑步骤。", "answer": "首先通过 dishService.getById() 查询菜品是否存在，若不存在则抛出异常；然后根据菜品单价和数量计算订单总价，设置订单的创建时间为当前时间，状态默认为 0，最后调用 MyBatis-Plus 的 save() 方法将订单保存到数据库。", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "这份课程设计报告的指导老师是谁？", "answer": "龙依婷", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "根据文档内容，参与该课程设计的团队成员一共有多少人？", "answer": "3 人", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "用户端首页的表格中展示了哪些菜品信息字段？", "answer": "ID、名称、价格、描述", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "系统界面设计的技术选型依据是什么，同时该设计如何优化了用户的操作流程？", "answer": "采用纯 HTML+CSS 实现以降低学习和维护成本；通过整体布局清晰的设计，使用户可以快速找到目标菜品并完成下单。", "source_file": "课程设计报告.docx", "source_doc_id": 7}
+{"question": "技能清单中“后端”部分具体列出了哪些技术？", "answer": "Spring Boot 3.x、MyBatis-Plus、RESTful API", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "该简历项目相比普通 CRUD 项目，其技术栈的差异化优势体现在哪里？", "answer": "覆盖「Java 后端 + Python AI 智能体 + 向量检索 + Redis 协同」的完整 AI 应用落地，技术栈更具差异化。", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "该简历模板中列出的主修课程包含哪些内容？", "answer": "数据结构、计算机网络、操作系统、数据库原理、Java 程序设计、Python 程序设计等", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "在教育经历部分，如果求职者没有 GPA、排名或奖项，文档建议如何操作？", "answer": "如暂无可删除此行", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "该项目的登录鉴权功能是通过哪两种技术组合实现的？", "answer": "JWT 和 Redis", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "在 REST 接口设计中，统一配置调用 Python Agent 服务旨在达成什么架构目标？", "answer": "实现业务与 AI 能力解耦", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "在 RAG 问答链路中，聊天历史缓存设置的 TTL 时长是多少？", "answer": "1800s", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "项目是如何处理敏感配置信息以实现仓库零明文的，具体涉及哪些配置项？", "answer": "将敏感配置改为环境变量注入，涉及数据库密码、JWT 密钥、OSS 凭据。", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "简历中列出的主要专业课程有哪些？", "answer": "数据结构、计算机网络、操作系统、数据库原理、Java 程序设计、Python 程序设计等", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "在智能知识库问答平台项目中，Java 后端与 Python 端各自承担了什么功能？", "answer": "Java 端负责用户体系、内容管理、文件上传与鉴权，并通过 HTTP 调用 Python 端的文档向量化与智能问答能力", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "该求职者目前处于哪个学习阶段？", "answer": "计算机专业大二在读", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "根据自我评价，该候选人认为自己具备哪些个人特质来保证实习工作的稳定性与质量？", "answer": "学习主动、代码规范意识强，能快速上手新框架，可保证稳定实习时长并承担实际开发任务", "source_file": "简历_实习版.docx", "source_doc_id": 8}
+{"question": "为什么 Few-shot 方法被认为是有效的？", "answer": "给几个示例，模型就会\"续写\"出类似格式的内容。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "根据文档中的面试建议，为了适应大模型的本质，Prompt 的三个关键部分应如何排序？", "answer": "System Prompt 放开头定基调，关键指令放结尾定方向，中间放上下文。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "在应用开发中，采用结构化 Prompt 而非大段文字的优势原理是什么？", "answer": "因为多头注意力在处理结构化信息时效率更高。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "多头注意力机制通过什么具体方式来克服单个注意力头难以捕捉多种关系的缺陷？", "answer": "它把 QKV 复制多份，每份独立算注意力，每份学不同的关系模式，最后把 8 个头的结果拼起来综合判断。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "早期 Transformer 与当前主流模型在位置编码的实现方式上有什么不同？", "answer": "早期用的是正弦/余弦函数来编码位置，而现在的模型大多用可学习的位置编码。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "根据文档内容，为什么模型在处理长上下文时容易遗忘前面的信息？", "answer": "这是因为位置编码存在隐含问题，模型在训练时见过的位置范围是有限的。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "作者在实际开发中刻意采用结构化格式编写 Prompt 的目的是什么？", "answer": "为了让多头注意力更容易处理。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "根据文档，结构化 Prompt 效果更好的机制原理是什么？", "answer": "Multi-Head Attention 让不同的头关注不同类型的关系，结构化格式能让每个头快速定位到相关部分，注意力分配更高效。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "根据文档建议，在实际开发过程中，为了避免信息被忽略，关键内容应当放置在上下文的哪些区域？", "answer": "上下文的开头或结尾。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "根据片段内容，导致超长上下文质量下降及中间信息被忽略的底层技术原因是什么？", "answer": "因为 Transformer 的 Self-Attention 本身没有顺序感，位置编码是硬加进去的，且模型对位置的处理能力受限于训练时见过的位置范围。", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "若将序列长度扩大为原来的两倍，Self-Attention 所需的计算量会增长多少？", "answer": "计算量翻四倍", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "根据文档，Transformer 的第一个局限性在计算复杂度方面是如何描述的？", "answer": "O(n²) 计算复杂度，Self-Attention 的计算量和序列长度的平方成正比", "source_file": "RAG_test.docx", "source_doc_id": 9}
+{"question": "RAG 技术主要旨在解决大模型存在的哪些具体问题？", "answer": "主要解决大模型知识截止、私有数据无法触达和容易幻觉这三个问题。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "在 RAG 的标准流程中，检索和重排序分别采用什么模型，且通常涉及的数据量是多少？", "answer": "检索用 Bi-Encoder，Rerank 用 Cross-Encoder；先检索捞 Top-20 再 Rerank 取 Top-5 是标配流程。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "在 RAG 知识库系统的数据层设计中，文档需要经过哪些步骤处理？", "answer": "文档解析→Chunk→Embedding→向量库 + ES 双写", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "该设计方案中，工程层和安全层各自包含了哪些关键实施内容？", "answer": "工程层包含 Redis 缓存热点查询、异步处理文档更新、监控检索准确率和幻觉率；安全层包含文档权限隔离、Prompt Injection 防御、敏感信息过滤", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "在 RAG 检索策略中，Top-K 参数一般设定在什么数值区间比较合适？", "answer": "通常 K=5-10 是比较好的平衡点。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "为什么在生产环境中进行混合检索时，通常建议使用 RRF 而不是手动固定权重？", "answer": "因为不同 query 的最佳权重差异很大，固定权重不一定好，而 RRF 不设权重靠排名融合更稳健。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "当用户提问模糊导致检索效果不佳时，可以采取哪些措施来改善？", "answer": "用 LLM 把模糊问题改写成更具体的检索 query、同时用原始 query 等分别检索再合并、Agent 先追问用户澄清需求。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "如果业务场景要求文档实时更新，应该选择哪种向量索引更新策略？", "answer": "增量更新，该策略只重新 embed 变更的文档，适合实时更新。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "当知识库文档发生变动时，向量索引通常有哪三种同步更新策略？", "answer": "全量重建、增量更新、双写。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "为了降低 RAG 系统的 Token 消耗，文中提到了哪些具体的优化手段及其做法？", "answer": "Prompt 压缩（裁剪检索结果中的冗余内容）、上下文窗口管理（只保留当前问题相关的历史）、模型路由（简单问题用小模型，复杂问题才用大模型）、缓存（相同或相似问题的检索结果缓存复用）。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "根据文档内容，RAG 和微调分别适用于什么样的应用场景？", "answer": "RAG 适合知识频繁更新、需要可溯源的场景，微调适合固化领域能力或改变风格。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "为了有效处理 RAG 的幻觉问题，文中提到了哪些具体的技术手段以及核心原则？", "answer": "核心原则是多策略叠加比单用一种效果好。具体技术手段包括 Prompt 约束只基于检索结果回答、输出自校验、引用标注、温度调低、检索与生成结果对齐，以及相似度低于阈值时兜底回答「未找到相关信息」。", "source_file": "RAG_test1.docx", "source_doc_id": 10}
+{"question": "文中提到 LightRAG 与 GraphRAG 在索引成本方面存在怎样的差异？", "answer": "LightRAG 的索引成本只有 GraphRAG 的一半左右。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "在设计法律文档检索系统时，促使选择 GraphRAG 的关键因素有哪些？", "answer": "法律文档库通常规模大但更新频率低，全局性问题多，预算通常充足，且对答案完整性要求高，GraphRAG 的预计算社区摘要优势明显。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "使用 GraphRAG 技术虽然能突破传统 RAG 的天花板，但会面临哪些明确的代价？", "answer": "索引成本高、增量更新难、社区粒度难调。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "根据文档，为什么在需要深度理解时建议选 GraphRAG，而在需要灵活性时建议选 LightRAG？", "answer": "因为 GraphRAG 擅长全局性问题但索引成本高、增量更新难；而 LightRAG 不强求预计算的全局理解，但增量友好、成本低、部署快，在图增强检索和轻量灵活之间找到了平衡点。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "根据文档描述，构成 GraphRAG 必不可少的四个要素是什么？", "answer": "知识图谱、社区层级、预计算摘要以及 Map-Reduce 查询。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "当 GraphRAG 的实体提取准确率不理想时，可以通过哪几种途径进行优化？", "answer": "可以通过三个方向优化：一是优化提取 Prompt 并提供领域术语表和实体类型定义；二是进行后处理过滤，用规则或二次 LLM 调用清洗低置信度数据；三是引入 NER 模型初筛后再用 LLM 精细提取。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "根据文档内容，LightRAG 适用于哪些具体的典型应用场景？", "answer": "新闻聚合平台的智能问答、客服知识库、研究者的个人论文库。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "在什么情况下，团队会因为成本和效率的考量而倾向于选择 LightRAG？", "answer": "当团队属于创业团队或中小规模项目，无法承受 GraphRAG 的索引成本，且希望快速上线看效果而不想花几小时建图时。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "知识图谱问答（KGQA）与 GraphRAG 在图谱构建方式上有何不同？", "answer": "KGQA 的图谱是事先人工或半人工构建的，而 GraphRAG 的图谱是自动从文本中提取的，不需要预先建好。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "在 GraphRAG 的社区发现算法选择上，Leiden 算法相比 Louvain 算法有什么关键优势？", "answer": "Louvain 可能产生内部节点并不全连通的社区，而 Leiden 作为改进版能保证社区内部一定连通，这对于节点连接不均匀的知识图谱很重要。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "文档中列举了哪些属于 GraphRAG 的典型应用场景？", "answer": "律所的案件分析系统、药企的文献检索平台、情报分析系统。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "当面临预算紧张且知识库需要频繁更新的情况时，应该选择 GraphRAG 还是 LightRAG？", "answer": "应该选择 LightRAG。因为 LightRAG 适用于成本敏感和知识库动态更新的场景，而 GraphRAG 需要预算充足且适合更新频率低的场景。", "source_file": "RAG_test2.docx", "source_doc_id": 11}
+{"question": "当 RAG 检索效果不理想时，优化思路建议从哪几个链路环节进行排查？", "answer": "文档处理阶段、Chunk 阶段、检索阶段、生成阶段。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "针对文档处理和分块（Chunk）阶段，具体需要检查哪些优化细节？", "answer": "文档处理阶段需关注 PDF 表格提取准确率、图片 OCR 及不同格式适配；Chunk 阶段需关注 chunk_size 合理性、是否针对不同文档类型调参以及 overlap 设置。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "文档中提到混合检索具体包含哪两部分？", "answer": "混合检索包含向量检索和关键词检索两部分。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "为什么在 RAG 项目中不能仅依赖纯向量检索？", "answer": "因为纯向量检索存在三个致命问题：无法做到精确匹配、专业术语召回效果差、以及容易遗漏产品名、人名或缩写等专有名词。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "根据文档内容，大语言模型在知识方面主要存在哪三个不足？", "answer": "知识截止、私有数据无法触达、容易幻觉。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "针对 LLM 存在的知识缺陷，RAG 在生成回答前需要完成哪些关键动作以确保基于事实？", "answer": "在 LLM 生成回答之前，先从外部知识库检索相关信息，把检索结果塞进 Prompt，让 LLM 基于事实回答。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "根据文档，Agentic RAG 主要适用于哪些领域的问答任务？", "answer": "复杂知识问答场景，具体包括法律、医疗和金融领域。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "当遇到实体复杂关联或多跳推理等问题时，普通 RAG 和 Agentic RAG 的表现如何，文档建议如何改进？", "answer": "两者都会感到吃力，建议将检索方式从向量切换到知识图谱。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "在 HNSW 算法中，哪两个参数被提及为核心参数，它们的具体含义及调整影响是什么？", "answer": "ef_construction（建图时搜索宽度，越大图质量越高但建图越慢）和 M（每个节点的邻居数，越大图越密但内存越大）。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "针对生产环境的多副本部署和持久化需求，文档中的面试答法推荐选择哪个数据库，并如何对比其他方案？", "answer": "选 Milvus，因为生产环境需要多副本部署和持久化，FAISS 不支持分布式，Qdrant 当时生态还不够成熟。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "余弦相似度计算结果中，数值 1 和 -1 分别代表向量间怎样的方向关系？", "answer": "1 表示方向完全相同，-1 表示方向相反。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "在 HNSW 算法中，ef_construction 和 M 参数分别影响什么，调大它们会有什么副作用？", "answer": "ef_construction 影响建图时搜索宽度，调大图质量高但建图慢；M 影响每个节点的邻居数，调大图密但内存大。", "source_file": "RAG_test3.docx", "source_doc_id": 12}
+{"question": "GraphRAG 与传统 RAG 在检索的具体对象上有什么区别？", "answer": "传统 RAG 检索的是和问题相似的文本，而 GraphRAG 检索的是和问题相关的实体、关系、社区。", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "根据文档中的演进逻辑，GraphRAG 是为了解决什么局限性而出现的？", "answer": "为了解决有些问题不是找文本块能解决的局限性，因此 GraphRAG 换了检索范式。", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "索引阶段结束后，系统会生成哪四类数据产物？", "answer": "实体表、关系表、社区表（含摘要）、文本块的向量索引。", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "在 GraphRAG 的本地查询模式下，系统处理用户问题并生成回答的具体流程是什么？", "answer": "首先从用户问题里提取关键实体，然后在图谱里找到对应节点，接着沿着边遍历关联的实体、关系、文本块以及所在社区的摘要，最后把这些上下文喂给 LLM 生成回答。", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "文本块中提到的张三负责的具体工作是什么？", "answer": "后端架构设计", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "Leiden 算法划分出的社区结构具有怎样的层级特征？", "answer": "底层是小社区，上层是社区之社区，最顶层是整个图", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "当社区层级划分得过于细致时，会产生什么后果？", "answer": "社区数量会爆炸，Map-Reduce 时要处理几百上千个社区摘要，token 成本飙升，延迟也跟着涨。", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "根据文档内容，社区粒度难以确定的根本矛盾是什么？", "answer": "层级选择是精确性和成本之间的权衡，没有银弹，且没有公式能直接算出来，需要根据数据量和查询需求反复调试。", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "当 GraphRAG 面临实体提取精度较低的情况时，可以采取哪些策略来提升效果？", "answer": "可以通过三个方向改进：一是优化提取 Prompt 并提供领域术语表和实体类型定义；二是进行后处理过滤，用规则或二次 LLM 调用清洗低置信度的实体和关系；三是引入 NER 模型做初筛，再用 LLM 做精细提取。", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "在 LightRAG 长期运行的过程中，为何需要定期维护图谱，具体的维护动作有哪些？", "answer": "因为随着不断插入新实体和关系，图谱可能变得稀疏或冗余，去重机制无法完全避免。具体的维护动作包括定期做一次图谱清洗，即合并冗余节点、修剪低权重的边、删除孤立的实体。", "source_file": "RAG_test5.docx", "source_doc_id": 15}
+{"question": "在混合检索方案中，关键词检索和语义检索各自的优势分别是什么？", "answer": "关键词检索（BM25）擅长精确匹配，语义检索（Embedding）擅长语义匹配。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "针对文档分块大小难以平衡的问题，文中提出了哪两种具体的解决策略？", "answer": "语义分块（按语义边界切分）和父子文档（小块做召回，大块做生成）。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "在 RAG 的完整链路中，哪三个环节被指出存在潜在问题？", "answer": "文档预处理、召回质量、生成忠实度。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "为什么文档中强调上游的坑会级联放大？请简述其传导过程。", "answer": "因为文档没清干净会导致召回搜出垃圾，垃圾文档混入上下文后模型被噪声带偏，最终导致输出幻觉。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "根据文档描述，\"Lost in the Middle\"现象具体指的是大模型对上下文哪个位置的信息关注度最低？", "answer": "中间位置的信息", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "为了减少模型硬编答案的情况，文档中提到的拒绝回答机制包含哪些具体操作建议和技术实现方式？", "answer": "操作建议是当置信度不够时，宁可说\"根据已有文档无法回答\"，也不要硬编。技术实现方式包括调整 temperature（降低随机性）或在 Prompt 中设置拒绝条件。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "在 RAG 落地项目中，作者提到数据清洗与模型检索阶段的工期分配比例是多少？", "answer": "80% 的工期花在数据上，20% 花在模型和检索上。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "针对 RAG 落地中召回质量难调的问题，文档中分析了哪些核心难点并给出了什么解决思路？", "answer": "核心难点是用户问法和文档写法之间的语义鸿沟，以及分块策略的两难（切太碎丢上下文，切太大引入噪声）。解决思路是混合检索加 Rerank，粗召回保证不漏，二次排序保证精度。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "在增量更新机制中，通常采用哪些手段来检测文档是否发生了变更？", "answer": "可以通过文档的元数据（如更新时间、版本号）做变更检测，或者对文档内容做哈希比对。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "为什么文档召回被认为是 RAG 系统中最难调优的环节，其核心矛盾是什么？", "answer": "因为召回是 RAG 的中枢，一旦出错后续全白费。其核心矛盾在于向量检索基于语义相似度，但语义相似并不等于任务相关，导致搜不准。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "针对简单事实型问题和复杂分析型问题，文档中建议分别设置多大的 K 值？", "answer": "简单事实型问题 K=3 就够了，复杂分析型问题可能需要 K=10 以上。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "在什么情况下向量召回会达到效果上限，此时应该采用什么思路？", "answer": "当知识本身是图状的（实体之间多跳关联、需要全局归纳）时，向量召回再怎么调也会碰天花板，这时候得换知识图谱检索的思路。", "source_file": "RAG_test4.docx", "source_doc_id": 16}
+{"question": "MCP 在本地和远程通信时分别使用什么协议？", "answer": "本地通信使用 stdio（标准输入输出），远程通信使用 HTTP + SSE（Server-Sent Events）。", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "根据文档，Skills 主要编码了哪些内容以补充 Agent 的工具能力？", "answer": "Skills 编码了领域专家经验，例如遇到代码审查时的标准、写 SQL 查询时 DBA 的最佳实践、回复客户时品牌的语气要求等。", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "文档中明确指出了哪三种策略可以用来防止 ReAct 出现死循环？", "answer": "最大步数限制、重复动作检测、超时控制", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "根据文档描述，ReAct 任务在哪些具体情形下会被强制终止或退出循环？", "answer": "超过最大步数（通常 15 步）、连续 3 次调用同一个工具且参数相同、或整个任务超过最大执行时间", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "根据文档内容，哪些具体领域因为对输出质量要求较高，被认为值得消耗更多 Token 进行反复打磨？", "answer": "代码生成、法律文书、学术论文、创意写作", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "文档中提到 Reflection 机制在应对幻觉问题时，Agent 应采取的具体行动流程是什么？", "answer": "当 Agent 发现自己给出的事实存疑时，可以触发\"验证反思\"，调用搜索工具去核实，而不是盲目输出。", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "在文档列举的工具中，CrewAI 具备哪些主要特性？", "answer": "角色化 Agent，任务分工，上手简单", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "根据 Anthropic 的提醒，为什么通常不建议过早采用多 Agent 架构？", "answer": "因为一个强大的单 Agent 往往比多个简单 Agent 协作更稳定、更省钱，盲目上多 Agent，调试地狱等着你", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "系统支持哪些关键词来启动代码检查任务？", "answer": "支持的关键词包括“帮我 review 代码”、“code review”以及“检查这段代码”。", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "根据文档要求，代码审查必须包含哪几个方面，且哪一方面被列为最高优先级？", "answer": "必须包含安全性、性能和代码质量三个方面，其中安全性被列为最高优先级。", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "根据文档内容，ReAct 模式存在哪些主要缺点？", "answer": "Token 消耗大、可能死循环、延迟高。", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "文档指出为了应对生产环境中的问题，需要将“循环”单独工程化，具体涉及哪五类治理？", "answer": "上下文、状态、预算、工具、终止。", "source_file": "RAG_test6.docx", "source_doc_id": 17}
+{"question": "生产系统至少需要区分哪五个要素来管理任务？", "answer": "Session、Task State、Memory、Artifact、Trace。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "为什么文档认为长任务不能仅依赖上下文窗口，且 Anthropic 的架构分离思路有何关键意义？", "answer": "因为长任务不能把生命全押在一个上下文窗口里，状态必须外化才能恢复；Anthropic 将持久 Session、Harness 和 Sandbox 分开，确保了模型上下文可被压缩替换时，任务事实能在外部可靠保存。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "文中指出“帮我把客服体验优化一下”为什么不是一个有效的任务？", "answer": "因为 Agent 不知道改什么，也不知道什么时候算完成。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "面对隐藏在员工头脑或群聊中的业务规则，生产团队应该如何处理才能让 Agent 获取到这些知识？", "answer": "要把稳定规则放进版本化文档、Schema、知识库和工具描述中，并按任务动态加载，而不是把所有资料一次性塞进上下文。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "在 MVP 阶段，系统建设的首要关注点应该放在哪里？", "answer": "看清失败分布。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "阶段四在逐级提高自治时，每升一级需要满足什么硬性条件，且明确反对基于什么理由进行升级？", "answer": "要有评估数据证明系统扛得住，而不是因为老板说“能不能再自动一点”。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "在 Agent 时代，人类工程师的价值主要体现在哪四个方面？", "answer": "把模糊目标定义清楚；给 Agent 构造能干活的环境；把风险变成机器不能越过的边界；用证据判断它到底有没有做好。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "随着 Agent 技术的发展，工程师的工作重心发生了怎样的转变，这对 Agent 应用工程师提出了什么具体要求？", "answer": "工作重心从把业务逻辑翻译成代码，转向设计一套生产系统。具体要求是站在业务与模型之间，懂任务拆解、Prompt、Context、RAG、工具设计、状态管理、评估和业务指标。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "在第三层架构中，上下文模块需要向模型提供哪些信息？", "answer": "当前目标、已有证据、可用工具和行为约束。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "根据文档，长任务如果仅依靠对话历史维持会面临什么风险？", "answer": "聊天历史不是任务状态，一旦上下文压缩、进程重启或者模型切换，任务就可能失忆。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "在系统级别提升时，除了管理层的意见外，必须依靠什么来证明系统能够承受？", "answer": "每升一级，都要有评估数据证明系统扛得住。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "根据文档，企业应该在什么情况下开始抽象 Agent 平台，且平台层与场景层的职责划分原则是什么？", "answer": "当多个团队开始重复建设模型接入、Session、工具权限、Trace 和评估系统时再抽象 Agent 平台。业务差异留在场景层，通用能力沉到平台层。", "source_file": "RAG_test7.docx", "source_doc_id": 18}
+{"question": "这位求职者的期望工作地点是哪里？", "answer": "广州", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "在专业技能中，该候选人提到能够基于什么构建多工具 Agent？", "answer": "熟悉 LangChain / LangGraph，能够基于 create_agent 构建多工具 Agent", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "文档中关于教育经历的具体信息有哪些？", "answer": "湖南农业大学 本科 智能科学与技术 2024-2028", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "为解决 Agent 初始化开销及并发请求上下文隔离问题，采取了哪些技术手段？", "answer": "采用全局单例 Agent 复用实例，并通过 ContextVar 保存请求级知识库参数，利用 asyncio Task 上下文隔离避免并发请求间的数据串扰", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "该智能知识库问答系统中，Java 服务主要承担什么职责？", "answer": "负责用户权限及文件管理。", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "在 RAG 问答过程中，系统是如何决定调用知识库检索还是联网搜索工具的？", "answer": "由大模型根据用户问题自主选择工具。", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "该人员在后端开发中熟悉哪些数据库系统？", "answer": "MySQL、PostgreSQL + pgvector、Redis", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "该人员在 AI 应用开发领域，除了 RAG 流程外，还涉及了哪些具体的 Agent 构建框架与底层流程？", "answer": "熟悉 LangChain / LangGraph，能够基于 create_agent 构建多工具 Agent；了解 LLM API、Tool Calling 及联网搜索等 AI 应用开发流程。", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "该智能知识库问答 Agent 项目涉及的技术栈具体包含哪些内容？", "answer": "Java / Spring Boot 3.x / MyBatis-Plus / MySQL / Redis / Python / FastAPI / LangChain / LangGraph / PostgreSQL / pgvector / Tavily / SSE / Docker", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
+{"question": "该智能知识库问答系统采用了怎样的服务架构分工？", "answer": "采用 Java + Python 双服务架构，Java 端负责用户权限及文件管理，Python 端基于 LangGraph 构建", "source_file": "刘子沐-Agent应用开发.pdf", "source_doc_id": 19}
