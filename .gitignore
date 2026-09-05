@@ -47,3 +47,16 @@ venv/
 ### OS / Editor ###
 .DS_Store
 Thumbs.db
+
+### Knowledge 本地数据 / 运行产物 ###
+Knowledge/volumes/
+Knowledge/Test_result_backup_*/
+Knowledge/Test_result/gen_result*.jsonl
+Knowledge/Test_result/answerability.jsonl
+Knowledge/Test_result/badcases.jsonl
+Knowledge/Test_result/stress_result*.jsonl
+Knowledge/RAG_test_file/import os.py
+Knowledge/answerability.jsonl
+
+### 私人文件 ###
+*.docx

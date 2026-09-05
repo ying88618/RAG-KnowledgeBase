@@ -1,11 +1,11 @@
 # 私域文档知识库（RAG + 多工具 Agent）
 
-> Java + Python 双服务架构的私域知识库问答系统：LangGraph 多工具 Agent 自主决策「本地知识库检索 / 联网搜索」，Milvus 向量召回 + bge-reranker 精排的两阶段检索，SSE 流式输出，并配套一套完整的 RAG 评测体系。
+> Java + Python 双服务架构的私域知识库问答系统：LangGraph 多工具 Agent 自主决策「本地知识库检索 / 联网搜索」，向量（bge-m3）+ BM25 关键词双通道召回、RRF 融合 + bge-reranker 精排的混合检索，SSE 流式输出，并配套一套覆盖检索与生成双端的 RAG 评测体系。
 
 ## 项目亮点
 
-- **两阶段检索**：Milvus（bge-m3）召回 Top-20 → bge-reranker-v2-m3 交叉编码器精排 Top-4，rerank 服务异常时自动降级双塔排序
-- **数据驱动优化**：自建 120 条 QA 评测集（LLM 生成 + 人工筛选 + LLM-as-a-Judge），三指标量化优化收益：**Hit Rate@4 45.8% → 68.3%，MRR 0.304 → 0.584，内容可回答率 27.5% → 40.0%**
+- **混合检索**：Milvus（bge-m3）向量召回 Top-20 + BM25（jieba 分词）关键词召回 Top-20，RRF 排名融合 → bge-reranker-v2-m3 精排 Top-4，rerank 服务异常时自动降级双塔排序
+- **数据驱动优化**：自建 120 条 QA 评测集（LLM 生成 + 人工筛选 + LLM-as-a-Judge），检索 + 生成双端量化：**Hit Rate@4 45.8% → 68.3% → 96.7%，MRR 0.304 → 0.584 → 0.896；混合检索下答案正确率 29.2% → 90.0%（幻觉率 1.7%）**
 - **多工具 Agent**：LangGraph `create_agent` 全局单例 + `contextvars` 请求级上下文隔离，并发请求零串库
 - **全链路流式**：sse-starlette 实现 token 级 SSE 输出、心跳保活、断连处理，Java 端透传转发
 - **独立完成双端开发**：Java 侧用户/权限/文件上传/OSS 全套业务 + Python 侧 AI 服务，独立联调
@@ -24,7 +24,7 @@
 ┌────────────┐ ┌──────────┐ ┌─────────┐ ┌──────────────┐ ┌──────────────┐
 │ MySQL      │ │ Redis    │ │ 阿里 OSS │ │ Milvus       │ │ 硅基流动 API  │
 │ 业务数据    │ │ 登录态/  │ │ 文件存储 │ │ 向量库        │ │ Qwen / bge-m3│
-│            │ │ 聊天历史 │ │          │ │ (两阶段检索)  │ │ / reranker   │
+│            │ │ 聊天历史 │ │          │ │ (混合检索)      │ │ / reranker   │
 └────────────┘ └──────────┘ └─────────┘ └──────────────┘ │ / Tavily     │
                                                         └──────────────┘
 ```
@@ -34,20 +34,23 @@
 ```
 用户问题 → Agent 自主选择工具
   ├─ knowledge_base_search（私域问题）
-  │    → Milvus 向量召回 Top-20（bge-m3）
-  │    → bge-reranker-v2-m3 精排 → Top-4（失败自动降级双塔排序）
+  │    → 双通道召回：Milvus 向量 Top-20（bge-m3）+ BM25 关键词 Top-20
+  │    → RRF 排名融合 → bge-reranker-v2-m3 精排 Top-4（失败自动降级）
   └─ web_search（实时/联网问题）→ Tavily
 ```
 
 ## 核心设计
 
-### 1. 两阶段检索（`KnowledgeBase/retriever.py`）
+### 1. 混合检索（`KnowledgeBase/retriever.py` + `KnowledgeBase/bm25_index.py`）
 
-bi-encoder（双塔）向量检索速度快但区分度有限——本项目实测相似度分数挤压在 0.55~0.80 区间，排序质量差（MRR 仅 0.304）。引入 cross-encoder 精排后：
+生成端评测定位到纯向量检索的术语召回缺陷后（`GetPri`/`HikariCP`/`dishes` 等精确词 Top-10 都召不回），引入 BM25 关键词通道：
 
-- 召回阶段：Milvus + bge-m3，COSINE 度量，取 Top-20 候选
-- 精排阶段：bge-reranker-v2-m3 对 (query, chunk) 逐对打分，取 Top-4
-- 容错：rerank API 异常时自动降级为双塔排序，检索服务不中断
+- **召回阶段（双通道）**：Milvus + bge-m3（COSINE）向量召回 Top-20；BM25（jieba 中英混合分词、英文术语整词保留）关键词召回 Top-20
+- **融合**：RRF（Reciprocal Rank Fusion）按排名融合双通道结果，不依赖分数量纲，chunk 按内容去重
+- **精排阶段**：bge-reranker-v2-m3 对融合结果逐对打分，取 Top-4
+- **容错**：rerank API 异常时自动降级为双塔排序，检索服务不中断
+
+双通道互补：向量通道兜底语义改写问题，BM25 通道兜底精确术语/专有名词召回——评测答案正确率由 29.2% 提升至 90.0%。
 
 ### 2. Agent 并发隔离（`KnowledgeBase/graph.py`）
 
@@ -59,7 +62,7 @@ Agent 以模块级全局单例构建（`create_agent` 仅执行一次）；请�
 
 ## 评测体系
 
-> 评测脚本见 `KnowledgeBase/evaluation/`（在项目根目录运行；`COLLECTION` / `.env` 路径请按实际环境调整）。
+> 评测脚本见 `RAG_test_file/`，测试集与结果见 `Test_result/`（在 `Knowledge/` 目录下用 venv 运行；`COLLECTION` / `.env` 路径请按实际环境调整）。
 
 **方法论**：
 
@@ -74,15 +77,27 @@ Agent 以模块级全局单例构建（`create_agent` 仅执行一次）；请�
 |---|---|---|---|
 | 基线：向量检索 Top-4（分块 400/120） | 45.8% | 0.304 | 27.5% |
 | 对照：分块 300/80 | 40.8% | 0.250 | 20.0% |
-| **两阶段：召回 Top-20 + 精排 Top-4** | **68.3%** | **0.584** | **40.0%** |
+| 两阶段：召回 Top-20 + 精排 Top-4 | 68.3% | 0.584 | 48.3% |
+| **混合检索：向量 + BM25 双通道 + RRF 融合** | **96.7%** | **0.896** | **96.7%** |
 
-\* 可回答率为宽松口径（yes + partial）；语料为 13 份高相似度中文文档，裁判口径偏严格。
+\* 可回答率为宽松口径（yes + partial；加权口径 yes + 0.5×partial：两阶段 39.2%、混合检索 94.6%）；语料为 13 份高相似度中文文档，裁判口径偏严格。混合检索下 HitRate@4 与可回答率一致（均为 96.7%），说明 Top-4 命中文档即片段可回答，检索端漏斗损耗已消除。
+
+**生成端评测**（LLM 基于 Top-4 片段生成答案，LLM-as-Judge 双判定：groundedness「答案是否有片段依据」+ correctness「与标准答案语义一致」，judge 仅依据片段/标准答案、禁止使用自身知识，口径与可回答率评测一致）：
+
+| 检索策略 | 幻觉率 | 答案正确率 |
+|---|---|---|
+| 纯向量检索 Top-4 | 1.7% | 29.2% |
+| **混合检索（向量 + BM25 + RRF → rerank Top-4）** | **1.7%** | **90.0%** |
+
+\* 幻觉率 = 无片段依据的答案占比；prompt 强制"片段不足即拒答"使幻觉率始终极低。片段覆盖（可回答率）由 48.3% 提升至 96.7% 后，答案正确率由 29.2% 升至 90.0%——正确率与可回答率的落差即生成端损耗，混合检索下两者已接近（96.7% vs 90.0%），说明瓶颈已从检索覆盖转向生成端。
 
 **结论**：
 
 1. 分块 300/80 为负优化（双指标一致下降），确认 400/120 处于最优区间——小 chunk 语义密度不足，改写后的问题与碎片化片段相似度下降；
 2. 检索瓶颈在双塔排序而非召回（MRR 低 + 分数挤压），两阶段检索三指标全面提升；
-3. 剩余未命中样本中过半为多文档知识重叠导致的判据假阴性（内容可答但文件不同），内容级指标更贴近真实体验。
+3. 剩余未命中样本中过半为多文档知识重叠导致的判据假阴性（内容可答但文件不同），内容级指标更贴近真实体验；
+4. **生成端评测定位真实瓶颈**：纯向量下 70% wrong 为"Top-4 无答案 → 诚实拒答"（幻觉率仅 1.7%，拒答机制生效），问题集中在 `GetPri`/`HikariCP`/`dishes` 等精确术语与专有名词——命中来源文档 ≠ Top-4 覆盖答案 chunk；
+5. 引入 **BM25 关键词通道（jieba 分词）与向量检索 RRF 融合**，检索与生成双端全面提升：Hit Rate@4 68.3% → **96.7%**、MRR 0.584 → **0.896**、片段可回答率 48.3% → **96.7%**、答案正确率 29.2% → **90.0%**（幻觉率维持 1.7% 不增），印证"纯向量检索对精确匹配/术语/专有名词召回失效"的经典问题；并基于 120 条测试集验证了 query 改写型自纠正对"库中无答案"类问题无效（72 次纠正仅净增 2 条），确认优化应聚焦检索覆盖而非生成。
 
 ## 快速开始
 
@@ -109,7 +124,7 @@ cp .env.example .env          # 填入真实 API Key
 uvicorn KnowledgeBase.main:app --host 0.0.0.0 --port 8000
 ```
 
-**环境变量**（`KnowledgeBase/.env`，`.env` 已被 gitignore）：
+**环境变量**（`Knowledge/.env`，`.env` 已被 gitignore）：
 
 | 变量 | 说明 |
 |---|---|
@@ -181,14 +196,15 @@ data: {"type": "done", "content": "完整回答文本"}
 │   ├── main.py                    # FastAPI 入口（ingest + chat）
 │   ├── chat.py                    # SSE 流式对话接口
 │   ├── graph.py                   # LangGraph Agent + 工具注册 + contextvars 隔离
-│   ├── retriever.py               # 两阶段检索（召回 + rerank 精排）
+│   ├── retriever.py               # 混合检索（向量+BM25 召回 + RRF + rerank 精排）
+│   ├── bm25_index.py              # BM25 关键词索引（jieba 分词, 从 Milvus 拉 chunk 建索引）
 │   ├── vectorstore.py             # Milvus 封装
 │   ├── embeddings.py / llm.py     # 模型接入（硅基流动 OpenAI 兼容）
 │   ├── chunker.py / loaders.py    # 分块与文档解析（pdf/docx/md/txt）
 │   ├── pipeline.py / ingest.py    # 入库流水线
 │   ├── memory.py                  # Redis 聊天历史
 │   ├── web_search.py              # Tavily 联网搜索
-│   └── evaluation/                # 评测脚本（测试集生成/检索评测/LLM裁判/rerank评测）
+│   └── self_correct.py            # 自纠正闭环（拒答检测 → query改写 → 合并重检索）
 └── pom.xml
 ```
 
@@ -203,4 +219,4 @@ data: {"type": "done", "content": "完整回答文本"}
 
 ## 相关技术
 
-Java 21 / Spring Boot 3.x / MyBatis-Plus / MySQL / Redis / 阿里云 OSS · Python / FastAPI / LangGraph / Milvus / bge-m3 / bge-reranker-v2-m3 / Tavily / sse-starlette
+Java 21 / Spring Boot 3.x / MyBatis-Plus / MySQL / Redis / 阿里云 OSS · Python / FastAPI / LangGraph / Milvus / bge-m3 / bge-reranker-v2-m3 / BM25（rank_bm25 + jieba）/ Tavily / sse-starlette
